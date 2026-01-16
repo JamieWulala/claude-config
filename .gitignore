@@ -1,0 +1,27 @@
+# Ignore everything by default
+*
+
+# But track these config files
+!.gitignore
+!settings.json
+!CLAUDE.md
+!commands/
+!commands/**
+
+# Don't track sensitive/cache data
+history.jsonl
+stats-cache.json
+cache/
+debug/
+file-history/
+ide/
+image-cache/
+paste-cache/
+plans/
+plugins/
+projects/
+session-env/
+shell-snapshots/
+statsig/
+telemetry/
+todos/
