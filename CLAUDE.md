@@ -16,6 +16,35 @@ Never modify code you haven't read. Always understand existing code before sugge
 
 ## Best Practices
 
+### File Header Comments (2026-01-19)
+Every code file should start with a comment block containing three sections:
+
+```typescript
+/**
+ * @role
+ * What this file does and where it fits in the system.
+ * Example: "API route handler for user authentication. Sits between client and auth service."
+ *
+ * @scope-exclusions
+ * What this file should NOT handle (prevents scope creep):
+ * - Session management (handled by /lib/session)
+ * - Password hashing (handled by /lib/crypto)
+ *
+ * @usage
+ * How to use this module correctly:
+ * - Import: `import { authenticate } from '@/api/auth'`
+ * - Test: `pnpm test src/api/auth.test.ts`
+ */
+```
+
+**Purpose**: Improves maintainability by making scope explicit upfront. Prevents files from becoming dumping grounds for unrelated functionality.
+
+**When to include**:
+- All new files with logic (skip for pure type definitions, simple configs)
+- Components, utilities, API routes, services, hooks
+
+**Keep it concise**: 2-5 lines per section max. If it needs more, the file is doing too much.
+
 ### Single Source of Truth Documentation (2026-01-18)
 Every project needs a `/docs` directory as the canonical source for all knowledge:
 - `/docs/product-requirements.md` - What we're building and why
