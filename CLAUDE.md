@@ -178,3 +178,90 @@ Turn repetitive workflows into documented skills in `.claude/skills/`:
 - **Maintenance**: `/groom-backlog` - audit task status and priority
 
 Skills should have: trigger phrases, step-by-step workflow, output format, troubleshooting.
+
+## React & Next.js Best Practices (2026-01-18)
+
+> Based on Vercel Engineering guidelines. Apply when writing or reviewing React/Next.js code.
+
+### Critical: Eliminate Async Waterfalls
+Sequential awaits for independent operations are the #1 performance killer:
+
+```typescript
+// BAD: Sequential (3 round trips)
+const user = await fetchUser()
+const posts = await fetchPosts()
+const comments = await fetchComments()
+
+// GOOD: Parallel (1 round trip)
+const [user, posts, comments] = await Promise.all([
+  fetchUser(),
+  fetchPosts(),
+  fetchComments()
+])
+```
+
+In API routes: **start promises early, await late**.
+
+### Critical: Avoid Barrel File Imports
+Barrel imports (from package root) load thousands of modules:
+
+```typescript
+// BAD: Loads entire library (~200-800ms)
+import { Check, X } from 'lucide-react'
+import { Button } from '@mui/material'
+
+// GOOD: Direct imports (~2KB vs ~1MB)
+import Check from 'lucide-react/dist/esm/icons/check'
+import Button from '@mui/material/Button'
+```
+
+**Next.js 13.5+ fix** - add to `next.config.js`:
+```js
+experimental: {
+  optimizePackageImports: ['lucide-react', '@mui/material', 'lodash', 'date-fns']
+}
+```
+
+### High: Server Component Data Minimization
+Only pass what client components actually need:
+
+```typescript
+// BAD: Passes entire user object
+<ClientComponent user={user} />
+
+// GOOD: Pass only needed fields
+<ClientComponent name={user.name} avatar={user.avatar} />
+```
+
+### Medium: Re-render Optimization
+1. **Extract expensive work into memoized components** - enables early returns before computation
+2. **Use primitive dependencies** in useEffect/useMemo - objects trigger on every render
+3. **Functional setState** for stable callbacks: `setCount(c => c + 1)` not `setCount(count + 1)`
+4. **Lazy state initialization**: `useState(() => expensiveComputation())` not `useState(expensiveComputation())`
+
+### Medium: Animation Performance
+- Only animate `transform` and `opacity` (GPU-accelerated)
+- Never use `transition: all` - list properties explicitly
+- Respect `prefers-reduced-motion`
+- Animate SVG via wrapper `<g>` with `transform-box: fill-box`
+
+### UI Review Checklist
+When reviewing React UI code, check:
+- [ ] **Accessibility**: Icon buttons have `aria-label`, form controls have labels
+- [ ] **Focus states**: Visible focus indicators (don't use `outline-none` without replacement)
+- [ ] **Forms**: Inputs have `autocomplete`, `type`, and `name` attributes
+- [ ] **Images**: All `<img>` have explicit `width` and `height` to prevent CLS
+- [ ] **Loading**: Use skeleton states, not spinners for content areas
+- [ ] **Errors**: Inline near fields, not toast-only
+- [ ] **State in URL**: Filters, tabs, pagination sync with query params
+- [ ] **Semantic HTML**: `<button>` not `<div onClick>`, `<a>` for navigation
+
+### Anti-Patterns to Flag
+- `user-scalable=no` or `maximum-scale=1` (disables zoom)
+- `onPaste` with `preventDefault` (blocks password managers)
+- `transition: all` (poor performance)
+- `outline-none` without `focus-visible` replacement
+- `<div onClick>` instead of `<button>`
+- Images without dimensions
+- Unvirtualized lists > 50 items
+- Hardcoded date/number formats (use `Intl.*`)
