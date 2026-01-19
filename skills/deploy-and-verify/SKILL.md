@@ -159,9 +159,58 @@ If deployment fails:
    git push origin main
    ```
 
+## Phase 5: Log the Deployment (Required)
+
+After every deployment, create a log entry in `/logs/operations/deployments/`:
+
+**File:** `YYYY-MM-DD-service-description.md`
+
+### Success Log Template
+```markdown
+# [Service] Deployment - YYYY-MM-DD
+
+## Summary
+[One-line description of what was deployed]
+
+## Changes
+- [Key changes in this deployment]
+
+## Commits
+- `abc1234` [commit message]
+
+## Verification
+- [x] Deployment completed
+- [x] Health check passed
+- [x] Logs show normal operation
+```
+
+### Failure Log Template
+```markdown
+# [Service] Deployment FAILED - YYYY-MM-DD
+
+## Summary
+[What was attempted]
+
+## Error
+[Error message or symptom]
+
+## Root Cause
+[If known - or "Pending COE analysis"]
+
+## Resolution
+- [ ] [What needs to be done to fix]
+
+## Rollback
+- [ ] Rolled back to commit `abc1234`
+```
+
+**On failure:** Run `/coe-analysis` and link the resulting bug report.
+
 ## Important Notes
 
 - **Never skip verification** - Always check logs after deployment
+- **Always log deployments** - Success or failure, create entry in `/logs/operations/deployments/`
+- **Link COE on failure** - If deployment fails, run `/coe-analysis` and link the bug report
 - **Check operations docs** - Read `docs/operations.md` if it exists for project-specific procedures
 - **Multiple services** - Many projects deploy to multiple services (frontend + worker + functions)
 - **Log interpretation** - Look for startup messages, errors, and "ready" indicators in logs

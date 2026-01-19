@@ -45,27 +45,34 @@ Update docs in priority order. Always use existing files, never create new ones 
 - Document patterns that worked well
 - Note any debugging insights
 
-#### 2c. Update Work Log
-Check for a logs section in the project. Common locations:
-- `/docs/worklog.md`
-- `/docs/changelog.md`
-- `CHANGELOG.md`
+#### 2c. Create Session Log (Required)
+Create a session summary in `/logs/sessions/`:
 
-If no work log exists, suggest creating `/docs/worklog.md` with format:
+**File:** `/logs/sessions/YYYY-MM-DD-brief-description.md`
+
 ```markdown
-# Work Log
+# Session: [Brief Description]
 
-## 2026-01-19
+**Date:** YYYY-MM-DD
+**Duration:** ~Xh
 
-### Session Summary
-[Brief description of what was accomplished]
+## Summary
+[One paragraph describing what was accomplished]
 
-### Changes Made
+## Changes Made
 - [File/component]: [What changed]
 
-### Learnings
+## Decisions Made
+- [Key decisions and rationale]
+
+## Learnings
 - [Any insights or patterns discovered]
+
+## Next Steps
+- [ ] [What to pick up next session]
 ```
+
+If `/logs/sessions/` doesn't exist, create it with a `.gitkeep` file.
 
 ### Phase 3: Update CLAUDE.md (Learnings & Rules)
 
@@ -142,7 +149,7 @@ Would you like me to add any of these?
 
 ### Documentation Updated
 - ✅ `/docs/backlog.md` - [changes]
-- ✅ `/docs/worklog.md` - [entry added]
+- ✅ `/logs/sessions/YYYY-MM-DD-*.md` - Session logged
 - ⏭️ `CLAUDE.md` - [pending user approval]
 
 ### Git Status

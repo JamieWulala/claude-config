@@ -67,3 +67,38 @@ Provide a comprehensive status update based on the **Current Focus** section and
 - Include specific task IDs when referencing backlog items
 - If an initiative is blocked, explain why and what's needed
 - If no backlog file exists, report on recent git commits and open issues instead
+
+## Optional: Log Progress (Weekly/Milestone)
+
+For significant milestones or weekly check-ins, create a log entry:
+
+**File:** `/logs/progress/YYYY-MM-DD-milestone-or-weekly.md`
+
+```markdown
+# Progress: [Milestone Name or Week of YYYY-MM-DD]
+
+**Date:** YYYY-MM-DD
+**Type:** Milestone / Weekly
+
+## Summary
+[Overall progress summary]
+
+## Metrics
+- Tasks completed: X
+- Tasks remaining: Y
+- Blockers: Z
+
+## Highlights
+- [Key accomplishments]
+
+## Concerns
+- [Any risks or blockers]
+
+## Next Period Goals
+- [ ] [Goals for next week/milestone]
+```
+
+This is optional but recommended for:
+- End of major milestones
+- Weekly standup summaries
+- When stakeholders need written updates

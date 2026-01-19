@@ -131,3 +131,41 @@ For each root cause, propose solutions at multiple layers:
 2. Create tasks for preventive measures
 3. Update relevant documentation (especially CLAUDE.md)
 4. Consider if this pattern applies elsewhere in the codebase
+5. **Log the COE** to `/logs/learnings/bugs/`
+
+## Logging the COE (Required)
+
+After completing the analysis, create a log entry:
+
+**File:** `/logs/learnings/bugs/YYYY-MM-DD-brief-title.md`
+
+```markdown
+# COE: [Brief Problem Title]
+
+**Date:** YYYY-MM-DD
+**Severity:** Critical / High / Medium / Low
+
+## Problem
+[One-line description]
+
+## 5 Whys Summary
+1. [First why → answer]
+2. [Second why → answer]
+3. [Third why → answer]
+4. [Fourth why → answer]
+5. [Root cause]
+
+## Root Cause
+[Category: Code / Tests / Types / Documentation / Process / Tooling]
+[Brief explanation]
+
+## Fixes Applied
+- **Immediate:** [What was fixed]
+- **Preventive:** [What was added to prevent recurrence]
+- **Detection:** [What was added to catch earlier]
+
+## Pattern to Remember
+> [One-line lesson that can be applied elsewhere]
+```
+
+This log serves as institutional memory - preventing the same mistake from happening again.

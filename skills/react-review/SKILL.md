@@ -130,6 +130,42 @@ Use this skill when the user says:
 /react-review src/app/page.tsx    # Review specific file
 ```
 
+## Logging Significant Findings
+
+When a review reveals patterns or pitfalls worth remembering, create a discovery log:
+
+**File:** `/logs/learnings/discoveries/YYYY-MM-DD-brief-title.md`
+
+```markdown
+# Discovery: [Pattern/Pitfall Name]
+
+**Date:** YYYY-MM-DD
+**Category:** Performance / Accessibility / Architecture / Pattern
+
+## Context
+[Where this was discovered]
+
+## Finding
+[What was learned]
+
+## Example
+```tsx
+// Before (problematic)
+[code]
+
+// After (fixed)
+[code]
+```
+
+## When to Apply
+[Situations where this applies]
+```
+
+Log discoveries when:
+- A pattern affects multiple files or is likely to recur
+- A subtle issue took significant debugging to identify
+- The fix is non-obvious and worth documenting
+
 ## References
 
 - [Vercel React Best Practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
