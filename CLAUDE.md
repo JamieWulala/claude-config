@@ -56,6 +56,60 @@ In monorepos, each package needs its own `CLAUDE.md` documenting:
 - Dependencies and their purposes
 - Cross-package data dependencies (what fields this package expects from others)
 
+### Execution Logs Directory (2026-01-19)
+Every monorepo should have a `/logs` directory at project root for documenting:
+
+```
+/logs
+├── operations/           # SOP execution logs
+│   ├── deployments/      # Vercel, Railway, Supabase deploys
+│   ├── migrations/       # Database migrations
+│   └── incidents/        # Outages, rollbacks, hotfixes
+├── sessions/             # Claude Code session summaries
+│   └── YYYY-MM-DD-*.md   # What was accomplished, decisions made
+├── learnings/            # Patterns and pitfalls discovered
+│   ├── bugs/             # Root cause analyses (COE)
+│   └── discoveries/      # Useful techniques found
+└── progress/             # Project milestones and metrics
+    └── weekly/           # Weekly progress snapshots
+```
+
+**Guidelines:**
+- Subfolder structure is flexible - create what makes sense for the context
+- Name files with ISO dates: `2026-01-19-vercel-deploy.md`
+- Keep entries concise - bullet points, not essays
+- Link to relevant commits, PRs, or docs
+- This is a **living log**, not a formal document
+
+**When to log:**
+- After any deployment or infrastructure change
+- After resolving a tricky bug (COE analysis)
+- After a significant session with learnings
+- When discovering a pattern worth remembering
+
+**Example entry** (`/logs/operations/deployments/2026-01-19-railway-worker.md`):
+```markdown
+# Railway Worker Deployment - 2026-01-19
+
+## What
+Deployed eligibility-worker with AeroDataBox fallback fix
+
+## Changes
+- Fallback on ANY SSET error (not just specific ones)
+- Include flight_date in SSET jobs for fallback
+
+## Commits
+- 33c22d7 fix: fallback to AeroDataBox on ANY SSET error
+- 796ec85 fix: include flight_date in SSET jobs
+
+## Verification
+- [ ] Railway deployment completed
+- [ ] Logs show fallback working
+- [ ] Test flight shows correct status
+```
+
+> The `/logs` directory is gitignored by default. Add to git if you want to preserve history.
+
 ### Task Tracking with backlog.md (2026-01-15)
 Create `backlog.md` in `/docs` for task tracking. Track upcoming work, priorities, and roadmap.
 
@@ -133,9 +187,10 @@ Update the appropriate level based on generality. Project patterns don't belong 
 ### Session Wrap-Up Discipline (2026-01-18)
 At end of every significant session, update:
 1. `/docs/backlog.md` with completed/in-progress task status
-2. Session notes with what was accomplished
-3. CLAUDE.md (appropriate level) with any lessons learned
-4. Consider if any workflow should become a skill
+2. `/logs/sessions/YYYY-MM-DD-summary.md` with what was accomplished
+3. `/logs/learnings/` if any bugs were fixed or patterns discovered
+4. CLAUDE.md (appropriate level) with any lessons learned
+5. Consider if any workflow should become a skill
 
 This ensures context isn't lost between sessions.
 

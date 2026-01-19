@@ -7,6 +7,8 @@
 !CLAUDE.md
 !commands/
 !commands/**
+!skills/
+!skills/**
 
 # Don't track sensitive/cache data
 history.jsonl
