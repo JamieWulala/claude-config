@@ -349,3 +349,109 @@ When reviewing React UI code, check:
 - Images without dimensions
 - Unvirtualized lists > 50 items
 - Hardcoded date/number formats (use `Intl.*`)
+
+## Testing Guidelines
+
+### E2E Testing (Playwright/WebdriverIO) Organization
+- Organize tests by feature domain in dedicated directories (e.g., tests/e2e/functional/buckets/, `tests/e2e/functional/upload/`)
+- Use naming convention: <feature>.test.ts (e.g., create-bucket.test.ts, `delete-object.test.ts`)
+- Keep feature-specific helpers in helpers.ts files within feature directories
+- Centralize shared utilities in /utils directory
+
+### Page Object/Accessor Pattern
+- Create accessor classes that encapsulate all DOM interactions for a page/component
+- Expose UI elements as properties (buttons, inputs, tables)
+- Provide high-level methods like setData(), waitForVisible(), sortByColumn()
+- Never expose raw selectors in test files - always use accessors
+
+### Test Data Management
+- Generate unique resource names using session ID + suffix pattern
+- Use beforeEach to reset test state, afterEach for cleanup
+- Implement aggressive cleanup with time-based filtering (delete resources older than N hours)
+- Always clean up resources even when tests fail - wrap cleanup in try/catch
+
+### Eventual Consistency Handling
+- Use batch verification pattern: verify condition N times consecutively before passing
+- Implement retry utilities with configurable attempts and backoff
+- Pattern: expectUntil(condition, description, { batchSize, maxRetries, timeout })
+- Pattern: getDataWithRetries(call, expected, maxRetries, matchingDataSets)
+
+### Debugging Support
+- Capture screenshots automatically on test failures
+- Generate HAR files for network request/response logging
+- Implement structured logging with levels (verbose, debug, info, warning, error, fatal)
+
+### Test Categorization
+- Tag tests by environment (gamma/prod), severity (sanity/durability), and purpose (canary/a11y)
+- Define test suites with metadata: files, tags, priority, groups, dependencies
+- Support filtering by tags via CLI (e.g., `--tag sanity`)
+
+### Integration/Component Testing (Jest/RTL) Organization
+- Collocate tests with source: src/[domain]/__tests__/[component].test.tsx
+- Keep test helpers in __tests__/helpers/ subdirectories
+- Use .test.ts/.test.tsx for unit/component tests
+- Use .integ.ts/.integ-ui.tsx for integration tests
+
+### Mocking Strategy
+- Create default connector mocks that stub all methods with jest.fn()
+- Default mocks should log warnings when unmocked methods are called
+- Use override mocks for specific test behavior - import after defaults
+- Pattern: jest.createMockFromModule() + selective overrides
+
+### Fixture Pattern (Builder/Modifier)
+- Use immutable fixture builders with deep cloning
+- Pattern: buildModelModifier<T>(base: T) => (modifier?: (base: T) => void) => T
+- Naming: MOCK_[DOMAIN]_[TYPE] for constants, get[Domain][Type] for builders
+- Separate SDK model fixtures from display model fixtures
+
+### White Box Component Testing
+- Mock connectors at the function level with controlled responses
+- Test both success and failure paths explicitly
+- Use accessor classes to abstract DOM queries from implementation
+- Test observable/epic flows with marble diagrams when using RxJS
+
+### Async Test Handling
+- Always wrap async operations in act() for React state updates
+- Use waitFor() for assertions that depend on async state
+- Implement navigation helpers that wait for path changes and spinners
+- Account for eventual consistency in distributed system tests with delays
+
+### Parameterized Testing
+- Use test.each() or custom parameterized test runners for multiple scenarios
+- Pattern: testCases.forEach(({ description, input, expected }) => it(description, ...))
+- Keep test data arrays near the tests they serve
+
+### State Isolation
+- Reset mocks between tests with jest.clearAllMocks() or beforeEach
+- Reset router history and DOM state between tests
+- Use mock stores for Redux testing to isolate state changes
+
+### General Testing Principles
+1. **Isolation:** Each test must be self-contained with proper setup/teardown
+2. **Determinism:** Use batch verification and retries for eventual consistency
+3. **Debuggability:** Comprehensive logging, screenshots, and network capture
+4. **Cleanup:** Always clean up created resources, even on failure
+5. **Parameterization:** Use data-driven tests to reduce duplication
+6. **Async Safety:** Proper await, act(), and waitFor() usage
+7. **Mock Clarity:** Default mocks with explicit overrides prevent surprises
+8. **Naming:** "should [behavior] when [condition]" for test descriptions
+
+### Parameterized Testing
+- Use test.each() or custom parameterized test runners for multiple scenarios
+- Pattern: testCases.forEach(({ description, input, expected }) => it(description, ...))
+- Keep test data arrays near the tests they serve
+
+### State Isolation
+- Reset mocks between tests with jest.clearAllMocks() or beforeEach
+- Reset router history and DOM state between tests
+- Use mock stores for Redux testing to isolate state changes
+
+### General Testing Principles
+1. **Isolation:** Each test must be self-contained with proper setup/teardown
+2. **Determinism:** Use batch verification and retries for eventual consistency
+3. **Debuggability:** Comprehensive logging, screenshots, and network capture
+4. **Cleanup:** Always clean up created resources, even on failure
+5. **Parameterization:** Use data-driven tests to reduce duplication
+6. **Async Safety:** Proper await, act(), and waitFor() usage
+7. **Mock Clarity:** Default mocks with explicit overrides prevent surprises
+8. **Naming:** "should [behavior] when [condition]" for test descriptions
