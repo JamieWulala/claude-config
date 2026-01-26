@@ -435,23 +435,3 @@ When reviewing React UI code, check:
 6. **Async Safety:** Proper await, act(), and waitFor() usage
 7. **Mock Clarity:** Default mocks with explicit overrides prevent surprises
 8. **Naming:** "should [behavior] when [condition]" for test descriptions
-
-### Parameterized Testing
-- Use test.each() or custom parameterized test runners for multiple scenarios
-- Pattern: testCases.forEach(({ description, input, expected }) => it(description, ...))
-- Keep test data arrays near the tests they serve
-
-### State Isolation
-- Reset mocks between tests with jest.clearAllMocks() or beforeEach
-- Reset router history and DOM state between tests
-- Use mock stores for Redux testing to isolate state changes
-
-### General Testing Principles
-1. **Isolation:** Each test must be self-contained with proper setup/teardown
-2. **Determinism:** Use batch verification and retries for eventual consistency
-3. **Debuggability:** Comprehensive logging, screenshots, and network capture
-4. **Cleanup:** Always clean up created resources, even on failure
-5. **Parameterization:** Use data-driven tests to reduce duplication
-6. **Async Safety:** Proper await, act(), and waitFor() usage
-7. **Mock Clarity:** Default mocks with explicit overrides prevent surprises
-8. **Naming:** "should [behavior] when [condition]" for test descriptions
